@@ -48,23 +48,25 @@ type Proxy_Pool []struct {
 
 func main() {
 
-	Url,delaytime := get_args()
+	Url,delaytime,loop := get_args()
 
 	backup := get_DefaultConnectionSettingsValue()
 	proxy := getproxy(Url)
 
 	fmt.Println(strconv.Itoa(len(proxy))+"个代理可用")
-	for i:=0 ; i <= len(proxy)-1;i++{
-		tmp := proxy[i].IP+":"+proxy[i].Port
-		s := check_proxy("http://www.baidu.com","http://"+tmp)
-		fmt.Println(i,s)
-		if s == 200 {
-			fmt.Println(tmp,proxy[i].Time,proxy[i].Anony)
-			Set_Proxy_ver2(tmp)
-		}else {
-			continue
+	for j:=0 ; j < loop ;j++ {
+		for i := 0; i <= len(proxy)-1; i++ {
+			tmp := proxy[i].IP + ":" + proxy[i].Port
+			s := check_proxy("http://www.baidu.com", "http://"+tmp)
+			fmt.Println(i, s)
+			if s == 200 {
+				fmt.Println(tmp, proxy[i].Time, proxy[i].Anony)
+				Set_Proxy_ver2(tmp)
+			} else {
+				continue
+			}
+			time.Sleep(time.Duration(delaytime) * time.Second)
 		}
-		time.Sleep(time.Duration(delaytime) * time.Second)
 	}
 	//恢复原来设置
 	set_proxy("DefaultConnectionSettings",backup)
@@ -72,16 +74,26 @@ func main() {
 	fmt.Println("恢复代理原来设置")
 }
 
-func get_args()(string,int){
-	u:=flag.String("u","", "proxy Url")
+func get_args()(string,int,int){
+
+	c:=flag.String("c","", "-c cls 重置代理设置为自动代理")
+	u:=flag.String("u","", "代理 Url，例如 http://127.0.0.1:5010/get_all")
 	t:=flag.Int("t",30, "自动切换代理时间间隔")
+	l:=flag.Int("l",1,"循环次数")
 
 	flag.Parse()
+
+	if *c == "cls" {
+		clear()
+		fmt.Println("重置代理成功")
+		os.Exit(3)
+	}
+
 	if *u == "" {
 		fmt.Println("proxy.exe -u http://127.0.0.1:5010 -t 30")
 		os.Exit(3)
 	}
-	return *u,*t
+	return *u,*t,*l
 }
 
 //返回Get请求数据
@@ -223,7 +235,7 @@ func check_proxy(webUrl, proxyUrl string) int {
 
 //清空代理设置，设置为自动检查代理，如果不慎操作注册表可以用来恢复设置
 func clear()  {
-	data := "460000003016000001000000010000003a050000006c6f63616c000000000100000000000000000000000000000000000000000000000000000000000000"
+	data := "460000003016000009000000010000003a050000006c6f63616c000000000100000000000000000000000000000000000000000000000000000000000000"
 	set_proxy("DefaultConnectionSettings",data)
 	set_proxy("SavedLegacySettings",data)
 }
