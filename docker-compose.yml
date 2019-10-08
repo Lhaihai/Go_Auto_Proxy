@@ -1,0 +1,17 @@
+version: '2'
+services:
+ web:
+   image: jhao104/proxy_pool
+   ports:
+    - "5010:5010"
+   environment:
+    - db_type=REDIS
+    - db_host=redis
+    - db_port=6379
+    - db_password=
+   depends_on:
+    - redis
+   links:
+    - redis:redis
+ redis:
+   image: redis:latest
