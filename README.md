@@ -8,6 +8,7 @@
 git clone https://github.com/Lhaihai/Go_Auto_Proxy
 cd Go_Auto_Proxy
 docker-compose up -d
+```
 2.Windows 运行
 ```
 proxy.exe -u http://127.0.0.1:5010/get_all/ -t 10
