@@ -3,6 +3,12 @@
 自动设置Windows 本地 IE代理
 
 快速上手：
+1.Linux 搭建代理池
+```
+git clone https://github.com/Lhaihai/Go_Auto_Proxy
+cd Go_Auto_Proxy
+docker-compose up -d
+2.Windows 运行
 ```
 proxy.exe -u http://127.0.0.1:5010/get_all/ -t 10
 ```
