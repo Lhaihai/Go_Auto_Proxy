@@ -21,3 +21,7 @@ Usage of proxy.exe:
         代理 Url，例如 http://127.0.0.1:5010/get_all
 
 ```
+
+目前比较遗憾的是获取到的IP不一定是HTTPS，免费的代理自然比不上收费的质量好，如果大家自己有资源可以修改下 getproxy 函数和 Proxy_Pool 结构体
+
+当然如果有好的代理池推荐可以发下Issues，不胜感激
